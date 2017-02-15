@@ -7,10 +7,17 @@
 class IRequest;
 class IResponse;
 
+/**< c³õÊ¼»¯ÇëÇó¶ÔÏó½Ó¿Ú */
 extern "C" WENBA_COMMON_API IRequest *CreateRequest();
 
+//Éú³ÉÏûÏ¢ÐòÁÐºÅ
 extern "C" WENBA_COMMON_API UInt32 CreateGwSeq();
 
+/**
+* @brief ·¢ËÍÇëÇóÀà
+*
+* IRequestÀà°üº¬ÁËSDKËùÓÐµÄ·¢ËÍÃüÁî½Ó¿Ú
+*/
 
 class WENBA_COMMON_API IRequest
 {
@@ -21,42 +28,48 @@ public:
 	};
 
 public:
-
-    /**
-	* å¯åŠ¨SDKï¼Œä½¿ç”¨SDKæ—¶é¦–å…ˆè¦è°ƒç”¨æ­¤å‡½æ•°
-	* @param pNotify å›žè°ƒç±»å®žä¾‹ï¼Œå®¢æˆ·ç«¯éœ€è¦ä»ŽIWenbaStResponseç±»æ´¾ç”Ÿå¹¶å®žçŽ°æ‰€æœ‰çš„æŽ¥å£
-	* @return æˆåŠŸè¿”å›žtrue å¤±è´¥è¿”å›žfalse
+	/**
+	* Æô¶¯SDK£¬Ê¹ÓÃSDKÊ±Ê×ÏÈÒªµ÷ÓÃ´Ëº¯Êý
+	* @param pNotify »Øµ÷ÀàÊµÀý£¬¿Í»§¶ËÐèÒª´ÓIResponseÀàÅÉÉú²¢ÊµÏÖËùÓÐµÄ½Ó¿Ú
+    * @param encryptType Êý¾ÝÍøÂç´«Êä¼ÓÃÜ·½Ê½£¬0-²»¼ÓÃÜ 1-Òì»ò¼ÓÃÜ
+	* @return ³É¹¦·µ»Øtrue Ê§°Ü·µ»Øfalse
 	*/
-	virtual bool Start(IResponse *pNotify) = 0;
+	virtual bool Start(IResponse *pNotify, int encryptType = 0, char * encryptPassword = 0) = 0;
 
 	/**
-	* åœæ­¢SDKæœåŠ¡
+	* Í£Ö¹SDK·þÎñ
 	*/
 	virtual void Stop(void) = 0;
 
+	/**
+	*Ïú»Ùsdk£¬ ÊÍ·ÅÄÚ´æ
+	*/
 	virtual void Destroy() = 0;
 
 
 	/**
-	* å­¦ç”Ÿç™»å½•è¯·æ±‚
-    * @param req  è¯·æ±‚æ•°æ®
-    * @see IWenbaStResponse::OnLogin
-    * @return æ¶ˆæ¯åºåˆ—ç ï¼Œç”¨æ¥å…³è”è¯·æ±‚ä¸Žå“åº”ï¼Œç­‰äºŽ0è¡¨ç¤ºå¤±è´¥,å¤§äºŽ0è¡¨ç¤ºæˆåŠŸ
-    */
+	* Ñ§ÉúµÇÂ¼ÇëÇó
+	* @param req  ÇëÇóÊý¾Ý
+	* @see IWenbaStResponse::OnLogin
+	* @return ³É¹¦·µ»Øtrue Ê§°Ü·µ»Øfalse
+	*/
 	virtual bool Login(const gwLoginReq &req, const UInt32 seq = 0, const UInt32 timeout = enmTimeoutSeconds) = 0;
 
 	/**
-    * å­¦ç”Ÿæ³¨é”€è¯·æ±‚
-    * @param req  è¯·æ±‚æ•°æ®
-    * @see IWenbaStResponse::OnLogout
-    * @return æ¶ˆæ¯åºåˆ—ç ï¼Œç”¨æ¥å…³è”è¯·æ±‚ä¸Žå“åº”ï¼Œç­‰äºŽ0è¡¨ç¤ºå¤±è´¥,å¤§äºŽ0è¡¨ç¤ºæˆåŠŸ
+	* Ñ§Éú×¢ÏúÇëÇó
+	* @param req  ÇëÇóÊý¾Ý
+	* @see IWenbaStResponse::OnLogout
+	* @return ³É¹¦·µ»Øtrue Ê§°Ü·µ»Øfalse
 	*/
 	virtual bool Logout(const gwLogoutReq &req, const UInt32 seq = 0, const UInt32 timeout = enmTimeoutSeconds) = 0;
 
+
 	virtual bool SendMsg(char* data, UInt32 dataLen, const UInt32 seq, const UInt32 operId) = 0;
 
-    virtual bool SendMsgToUser(char* data, UInt32 dataLen, UInt64 receiverId, UInt32 receiverOperId, const UInt32 seq, const UInt32 operId)=0;
-
+virtual bool SendMsgToUser(char* data, UInt32 dataLen, UInt64 receiverId, UInt32 receiverOperId, const UInt32 seq, const UInt32 operId)=0;
+	/**
+	* »ñÈ¡response¶ÔÏó
+	*/
 	virtual IResponse *GetResponse() = 0;
 
 };

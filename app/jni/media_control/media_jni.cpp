@@ -117,22 +117,27 @@ public:
 			return;
 		}
 
-		jstring tmpKey = env->NewStringUTF("code");
+
+
+	    jstring tmpKey = env->NewStringUTF("code");
 
 		env->CallObjectMethod(resObject, sPutIntMethod, tmpKey, res.errCode);
 		if (res.errCode == 0) {
 			tmpKey = env->NewStringUTF("userId");
 			env->CallObjectMethod(resObject, sPutIntMethod, tmpKey, res.userId);
-		} else {
-			tmpKey = env->NewStringUTF("errorMsg");
+		}
+	    else {
+			tmpKey = env->NewStringUTF("errMsg");
 			jstring errMsg = env->NewStringUTF(res.errMsg);
-
 			env->CallObjectMethod(resObject, sPutObjectMethod, tmpKey, errMsg);
 		}
+
+		//DEBUG_LOG("OnLogin code %s, errorMsg %s ", res.errCode,res.errMsg);
 
 		invokeCallbackMethod(env, callbackObject, resObject);
 
 		JNI_put_env();
+
 	}
 
 	void OnLogout(const gwLogoutRsp &res, UInt32 seq) {
@@ -411,7 +416,7 @@ static jboolean JNI_start(JNIEnv* env, jobject thiz) {
 
 	{
 		IResponse* sResponseNotify = new ResponseHandler();
-		ret = sRequestManager->Start(sResponseNotify);
+		ret = sRequestManager->Start(sResponseNotify, 1, "aixue");
 	}
 
 	bail: unlockMediaCallbackMutex();
@@ -460,13 +465,14 @@ static void JNI_login(JNIEnv* env, jobject thiz, jstring host, jint port,
 	requestManager->Login(req, seqId);
 }
 
-static void JNI_logout(JNIEnv* env, jobject thiz, jint userId,
+static void JNI_logout(JNIEnv* env, jobject thiz, jint userId, jint operId,
 		jobject callback) {
 	IRequest* requestManager = sRequestManager;
 
 	gwLogoutReq req;
 
 	req.user_id = userId;
+	req.oper_id = operId;
 
 	int seqId = CreateGwSeq();
 
@@ -520,7 +526,7 @@ static JNINativeMethod gMethods[] =
 						(void*) JNI_login },
 				//logout
 				{ "fun_logout",
-						"(Ltestgateway/xun/com/testgateway/MediaControlManager$ResponseCallback;)V",
+						"(IILtestgateway/xun/com/testgateway/MediaControlManager$ResponseCallback;)V",
 						(void*) JNI_logout },
 				//sendMsgToUser
                 { "fun_sendMsgToUser",

@@ -12,20 +12,21 @@
 #include "Poco/Types.h"
 using namespace Poco;
 
-#define GW_USER_LEN                                256
-#define GW_PWD_LEN                                 256
-#define GW_VERSION_LEN                             64
-#define GW_EXT_DATA_LEN								4096
-#define GW_ERR_MSG_LEN                             128
+/// ���ȶ����
+#define GW_USER_LEN                                256  ///< �û�������
+#define GW_PWD_LEN                                 256  ///< ���볤��
+#define GW_VERSION_LEN                             64   ///< �ͻ��˰汾�ų���
+#define GW_EXT_DATA_LEN								4096 ///< ��չ���ݳ���
+#define GW_ERR_MSG_LEN                             128  ///< ������Ϣ����
 #define GW_HOST_LEN									128
 
 
 
-#define GW_TOKEN_LEN				                128
-#define GW_PHONE_LEN			                    20
-#define GW_REASON_LEN                              128
-#define GW_ERRMSG_LEN                              128
-#define GW_AVATAR_LEN                              512
+#define GW_TOKEN_LEN				                128	 ///< ���Ƴ���;
+#define GW_PHONE_LEN			                    20   ///< �绰����
+#define GW_REASON_LEN                              128  ///< ԭ�򳤶�
+#define GW_ERRMSG_LEN                              128  ///< ������Ϣ����
+#define GW_AVATAR_LEN                              512  ///< �û�ͷ��url����
 
 
 #pragma pack(1)
@@ -75,8 +76,8 @@ typedef struct {
 
 typedef struct
 {
-	UInt32 code;
-	char errorMsg[GW_ERRMSG_LEN];
+	UInt32 code;                                ///< ������
+	char errorMsg[GW_ERRMSG_LEN];                  ///< ������Ϣ
 }gwDisconnectInfo;
 
 

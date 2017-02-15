@@ -9,15 +9,18 @@ import android.widget.Button;
 import org.json.JSONObject;
 
 public class RequestMainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button startLogin, sendMsg, startLoginS;
-    private MediaControlManager mediaControlManager;
+    private Button startLogin, sendMsg, startLoginS,logout;
+//    private MediaControlManager mediaControlManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_main);
 
-        mediaControlManager = new MediaControlManager(new MediaControlManager
+        Log.d("kkkkkkkk", "MediaControlManager.getInstance().getCurTSConncetStatus() --> " + MediaControlManager.getInstance().getCurTSConncetStatus());
+
+        MediaControlManager.getInstance().init(new MediaControlManager
                 .MediaControlNotifyListener() {
 
 
@@ -50,13 +53,16 @@ public class RequestMainActivity extends AppCompatActivity implements View.OnCli
 
         startLoginS = (Button) findViewById(R.id.start_login_s);
         startLoginS.setOnClickListener(this);
+
+        logout = (Button)findViewById(R.id.logout);
+        logout.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.start_login:
-                mediaControlManager.login("ax.wpss.cn", 1090, "11000000001", "e10adc3949ba59abbe56e057f20f883e", "1.0" +
+                MediaControlManager.getInstance().login("ax.wpss.cn", 1090, "11000000001", "e10adc3949ba59abbe56e057f20f883e", "1.0" +
                         ".1", 21, new MediaControlManager.MediaRespCallback<LoginRespModel>(LoginRespModel.class) {
 
                     @Override
@@ -66,9 +72,12 @@ public class RequestMainActivity extends AppCompatActivity implements View.OnCli
                                 " " + var1.getCode());
                     }
                 });
+                MediaControlManager.getInstance().setConncetStatus(MediaControlManager.TSConncetStatus
+                        .CONNECTED);
+                Log.d("kkkkkkkk", "MediaControlManager.getInstance().getCurTSConncetStatus() --> " + MediaControlManager.getInstance().getCurTSConncetStatus());
                 break;
             case R.id.send_msg:
-                mediaControlManager.sendMsgToUser("h哈哈哈发送到发送到!!", 1419, 20, 21, new MediaControlManager
+                MediaControlManager.getInstance().sendMsgToUser("h哈哈哈发送到发送到!!", 1419, 20, 21, new MediaControlManager
                         .MediaRespCallback<BaseModel>(BaseModel.class) {
 
 
@@ -79,7 +88,7 @@ public class RequestMainActivity extends AppCompatActivity implements View.OnCli
                 });
                 break;
             case R.id.start_login_s:
-                mediaControlManager.login("ax.wpss.cn", 1090, "10000000002", "e10adc3949ba59abbe56e057f20f883e", "1.0" +
+                MediaControlManager.getInstance().login("ax.wpss.cn", 1090, "10000000002", "e10adc3949ba59abbe56e057f20f883e", "1.0" +
                         ".1", 20, new MediaControlManager.MediaRespCallback<LoginRespModel>(LoginRespModel.class) {
 
                     @Override
@@ -87,6 +96,14 @@ public class RequestMainActivity extends AppCompatActivity implements View.OnCli
                         Log.d("kkkkkkkk", "var1.getErrorMsg() --> " + var1.getErrorMsg() + " var1.getUserId() --> " +
                                 var1.getUserId() + " var1.isSuccess() --> " + var1.isSuccess() + " var1.getCode() -->" +
                                 " " + var1.getCode());
+                    }
+                });
+                break;
+            case R.id.logout:
+                MediaControlManager.getInstance().logout(1276, 21, new MediaControlManager.MediaRespCallback<BaseModel>(BaseModel.class) {
+                    @Override
+                    public void respCallBack(BaseModel var1) {
+                        Log.d("kkkkkkkk", "var1 --> " + var1.toString());
                     }
                 });
                 break;
